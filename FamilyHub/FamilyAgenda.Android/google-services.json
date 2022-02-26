@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "820955986344",
+    "firebase_url": "https://project001-ac43c.firebaseio.com",
+    "project_id": "project001-ac43c",
+    "storage_bucket": "project001-ac43c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820955986344:android:bd4870975c7595d874059d",
+        "android_client_info": {
+          "package_name": "com.media.familyhub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820955986344-oudufretkrccj6r1gp8kqq1aho9q0s42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZGfukRgE59vowD70e2L8SgJGP7GzOO9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820955986344-oudufretkrccj6r1gp8kqq1aho9q0s42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

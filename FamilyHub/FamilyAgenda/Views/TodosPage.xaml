@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cv="clr-namespace:FamilyAgenda.Converters"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:prism="http://prismlibrary.com"
+             xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="FamilyAgenda.Views.TodosPage"
+             x:Name="TodosView"
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutBehavior="Flyout"
+             Visual="Material">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cv:RelativeDateTimeConvertor x:Key="RelativeDateTimeConvertor" />
+            <cv:LabelTextDecorationConverter x:Key="LabelTextDecorationConverter" />
+            <cv:InitialsBgColorConverter x:Key="InitialsBgColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackLayout Padding="20,50" Spacing="0" BackgroundColor="{StaticResource primary}">
+            <Label Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:dd MMM yyyy}'}" 
+                   TextColor="White"
+                   FontSize="Small"/>
+            <Label Text="Family's todo list"
+                   TextColor="White"
+                   FontSize="Title"
+                   FontAttributes="Bold"/>
+        </StackLayout>
+
+        <Frame Grid.Row="1" 
+               CornerRadius="25"
+               Margin="0,-20,0,-20"    
+               Padding="0,30">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Padding="20,0" ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Entry Text="{Binding TodoContent, Mode=TwoWay}" 
+                           Placeholder="new task..." 
+                           HorizontalOptions="FillAndExpand" />
+                    <buttons:SfButton Grid.Column="1" 
+                                          Text="Add"
+                                          TextColor="{StaticResource primary}" 
+                                          BorderColor="Transparent" 
+                                          BackgroundColor="Transparent" 
+                                          HorizontalOptions="EndAndExpand"
+                                          Command="{Binding AddNewItemCommand}"/>
+                </Grid>
+
+                <BoxView Grid.Row="1" Margin="20,10,20,20" />
+
+                <RefreshView Grid.Row="2" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                    <ScrollView>
+                        <CollectionView x:Name="collectionV" 
+                                        ItemsSource="{Binding TodoItems}" 
+                                        EmptyView="No items to display">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <SwipeView BackgroundColor="Transparent">
+                                        <SwipeView.RightItems>
+                                            <SwipeItems>
+                                                <SwipeItem IconImageSource="ic_delete"
+                                                           BackgroundColor="{StaticResource primaryDark}"
+                                                           Command="{Binding Source={x:Reference TodosView}, Path=BindingContext.DeleteItemCommand}"
+                                                           CommandParameter="{Binding}"/>
+                                            </SwipeItems>
+                                        </SwipeView.RightItems>
+                                        <Grid Padding="20,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Frame Style="{StaticResource Initials}"
+                                                   BackgroundColor="{Binding UserInitials, Converter={StaticResource InitialsBgColorConverter}}" 
+                                                   HorizontalOptions="Start" 
+                                                   VerticalOptions="Center">
+                                                <Label Text="{Binding UserInitials}" 
+                                                       HorizontalOptions="Center" 
+                                                       VerticalOptions="Center" 
+                                                       HorizontalTextAlignment="Center" 
+                                                       VerticalTextAlignment="Center" />
+                                            </Frame>
+                                            <StackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center" Margin="10,0,10,0">
+                                                <Label Text="{Binding Content}" 
+                                                       TextColor="{StaticResource primaryText}" 
+                                                       TextDecorations="{Binding Completed, Converter={StaticResource LabelTextDecorationConverter}}" />
+                                                <Label Text="{Binding CreatedAt, Converter={StaticResource RelativeDateTimeConvertor}}" 
+                                                       FontSize="Micro" 
+                                                       TextColor="{StaticResource secondaryText}" />
+                                            </StackLayout>
+                                            <CheckBox x:Name="check" 
+                                                      Grid.Column="2" 
+                                                      Color="{StaticResource primary}"
+                                                      IsChecked="{Binding Completed, Mode=TwoWay}"
+                                                      IsVisible="{Binding Path=BindingContext.IsCheckBoxVisible, Source={x:Reference TodosView}}"
+                                                      HorizontalOptions="EndAndExpand" 
+                                                      VerticalOptions="Center">
+                                                <CheckBox.Behaviors>
+                                                    <behaviors:EventToCommandBehavior EventName="CheckedChanged"
+                                                                                      Command="{Binding Path=BindingContext.CheckedChangedCommand, Source={x:Reference TodosView}}"
+                                                                                      CommandParameter="{Binding .}"/>
+                                                </CheckBox.Behaviors>
+                                            </CheckBox>
+                                        </Grid>
+                                    </SwipeView>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </RefreshView>
+
+                <ActivityIndicator Grid.Row="2" IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}" Color="Accent" VerticalOptions="Center" HorizontalOptions="Center" />
+            </Grid>
+        </Frame>
+    </Grid>
+
+</ContentPage>

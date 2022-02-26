@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="FamilyAgenda.Views.NewEventPage">
+    
+    <StackLayout Padding="30,20" 
+                 Spacing="20">
+        <Button Text="&#xf00d;"
+                FontSize="Large"
+                FontFamily="{StaticResource FontAwesomeSolid}"
+                BackgroundColor="Transparent"
+                HorizontalOptions="End"
+                Margin="0,0,-30,0"
+                Command="{Binding CancelCommand}" />
+
+        <Frame Padding="20" 
+               HasShadow="True"               
+               Visual="Material">
+            <StackLayout>
+                <Label Text="Subject" FontSize="Subtitle" FontAttributes="Bold" TextColor="{StaticResource primaryText}" />
+                <Entry Placeholder="Enter subject..." Text="{Binding Subject}" />
+                <BoxView Margin="0,20" />
+                <Label Text="Start" FontSize="Subtitle" FontAttributes="Bold" TextColor="{StaticResource primaryText}" />
+                <StackLayout Orientation="Horizontal">
+                    <DatePicker Date="{Binding SchedulerEvent.StartDate}" Format="dd/MM/yyyy" />
+                    <TimePicker Time="{Binding SchedulerEvent.StartTime}" Format="HH:mm" />
+                </StackLayout>
+                <BoxView Margin="0,20" />
+                <Label Text="End" FontSize="Subtitle" FontAttributes="Bold" TextColor="{StaticResource primaryText}" />
+                <StackLayout Orientation="Horizontal">
+                    <DatePicker Date="{Binding SchedulerEvent.EndDate}" Format="dd/MM/yyyy" HorizontalOptions="Start" />
+                    <TimePicker Time="{Binding SchedulerEvent.EndTime}" Format="HH:mm" HorizontalOptions="Start" />
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+
+        <Button Text="Save" BackgroundColor="{StaticResource primary}" TextColor="White" VerticalOptions="EndAndExpand" Command="{Binding SaveEventCommand}" />
+    </StackLayout>
+
+</ContentPage>
